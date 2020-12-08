@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="error" monitorInterval="30">
+    <Properties>
+        <Property name="local.logging.path">./logs</Property>
+        <Property name="project.name">log4j2</Property>
+        <Property name="logging.file.path">${local.logging.path}/${project.name}</Property>
+        <Property name="logging.file.name">${sys:logging.file.path}/${project.name}.log</Property>
+        <Property name="logging.file.warn.name">${sys:logging.file.path}/${project.name}-warn.log</Property>
+        <Property name="logging.file.error.name">${sys:logging.file.path}/${project.name}-error.log</Property>
+        <Property name="layout">%d %p [%t] %c{10}:%M:%L %m%n</Property>
+    </Properties>
+
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${layout}"/>
+        </Console>
+
+        <RollingRandomAccessFile name="RollingRandomAccessFile"
+                fileName="${logging.file.name}"
+                filePattern="${logging.file.name}-%d{yyyy-MM-dd HH-mm}-%i.log"
+                immediateFlush="false">
+            <PatternLayout pattern="${layout}"/>
+            <ThresholdFilter level="info" />
+            <TimeBasedTriggeringPolicy />
+        </RollingRandomAccessFile>
+    </appenders>
+
+    <loggers>
+        <root level="info">
+            <!--<AppenderRef ref="RollingRandomAccessFile"/>-->
+            <AppenderRef ref="Console" level="${sys:logging.console.level:debug}"/>
+        </root>
+
+        <!--<logger name="类名或者包名" level="日志级别" additivity="是否将日志信息传递给上级">-->
+        <!--<AppenderRef ref="appender name" />-->
+        <!--</logger>-->
+    </loggers>
+</configuration>
